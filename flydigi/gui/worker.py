@@ -59,10 +59,19 @@ class DeviceWorker(QObject):
     # -- thread body ------------------------------------------------------
 
     def run(self) -> None:
-        try:
-            self.ctl = Controller().open()
-        except DeviceError as exc:
-            self.disconnected.emit(str(exc))
+        # Keep looking until the controller appears, so plugging it in or
+        # moving its mode switch is picked up without restarting the app.
+        last = None
+        while self._running:
+            try:
+                self.ctl = Controller().open()
+                break
+            except DeviceError as exc:
+                if str(exc) != last:
+                    last = str(exc)
+                    self.disconnected.emit(last)
+                time.sleep(2)
+        else:
             return
         try:
             info = C.read_info(self.ctl)

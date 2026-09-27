@@ -168,13 +168,14 @@ class MainWindow(QWidget):
 
         self.status = QLabel("Connecting…")
         self.status.setObjectName("hint")
+        self.status.setWordWrap(True)
 
         right = QVBoxLayout()
         right.setContentsMargins(0, 0, 0, 0)
         right.addWidget(self.stack, 1)
         bar = QHBoxLayout()
         bar.setContentsMargins(26, 0, 26, 10)
-        bar.addWidget(self.status)
+        bar.addWidget(self.status, 1)
         bar.addStretch(1)
         right.addLayout(bar)
 
@@ -230,8 +231,9 @@ class MainWindow(QWidget):
 
     def _on_connected(self, info):
         self.device_page.update_info(info)
-        self.status.setText(
-            f"{info.name} on {self.worker.ctl.iface.path} — firmware {info.firmware}")
+        self.status.setText(f"{info.name} connected — firmware {info.firmware}")
+        self.profiles_page.setEnabled(True)
+        self.settings_page.setEnabled(True)
         self.settings_page.refresh()
         self.profiles_page.refresh()
         self.macros_page.refresh()

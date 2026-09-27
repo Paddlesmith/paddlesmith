@@ -136,6 +136,33 @@ def find_controllers() -> list[HidInterface]:
     return out
 
 
+#: What the controller poses as when its back switch is not in the USB/dongle
+#: position. In those modes the configuration interface is not exposed.
+NINTENDO_VID, SWITCH_PRO_PID = 0x057E, 0x2009
+MICROSOFT_VID = 0x045E
+
+
+def not_found_message() -> str:
+    """Explain why no controller was found, spotting the wrong-mode cases."""
+    msg = "No Flydigi controller found. Is it plugged in and powered on?"
+    try:
+        others = enumerate_interfaces()
+    except Exception:
+        return msg
+    if any(i.vid == NINTENDO_VID and i.pid == SWITCH_PRO_PID for i in others):
+        return ("A Nintendo Switch Pro Controller is connected. If that is your "
+                "Flydigi, its back switch is in NS (Switch) mode: slide it to "
+                "the USB-stick position on the left, press the Flydigi logo "
+                "button, and try again.")
+    if any(i.vid == MICROSOFT_VID and "xbox" in (i.name or "").lower()
+           for i in others):
+        return ("An Xbox controller is connected. If that is your Flydigi, it "
+                "is in Bluetooth mode, which can't be configured: slide the "
+                "back switch to the USB-stick position on the left and connect "
+                "the cable or the 2.4 GHz dongle.")
+    return msg
+
+
 def detect_connection(vid: int, pid: int) -> str:
     pages = {i.usage_page for i in enumerate_interfaces()
              if i.vid == vid and i.pid == pid}
@@ -153,9 +180,7 @@ class Controller:
         if iface is None:
             candidates = find_controllers()
             if not candidates:
-                raise NotFound(
-                    "No Flydigi controller found. Is it plugged in and powered on?"
-                )
+                raise NotFound(not_found_message())
             iface = candidates[0]
         self.iface = iface
         self.endpoint = endpoint

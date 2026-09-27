@@ -97,8 +97,10 @@ These are in **Settings** in the app:
 
 ## If something goes wrong
 
-- **The app can't see the controller:** check the switch on the back, and use
-  the cable rather than Bluetooth.
+- **The app can't see the controller**, or says a **Switch Pro Controller**
+  or **Xbox controller** is connected: the switch on the back is in the wrong
+  position. Slide it all the way **left** (the USB-stick picture) and press the
+  Flydigi logo button. The app finds it on its own within a couple of seconds.
 - **macOS says the app isn't allowed:** open **System Settings → Privacy &
   Security → Input Monitoring**, turn on **Paddlesmith**, then reopen it.
 - **A warning mentions the firmware:** the app has stopped itself from writing

@@ -11,7 +11,7 @@ import time
 from . import commands as C
 from . import macros as MAC
 from . import mapping as M
-from .device import (FLYDIGI_VID, Controller, DeviceError, NotFound,
+from .device import (FLYDIGI_VID, not_found_message, Controller, DeviceError, NotFound,
                      enumerate_interfaces)
 from .input_monitor import InputMonitor
 from .updates import UpdateCheckError, check_firmware
@@ -55,6 +55,9 @@ def cmd_list(args) -> int:
     flydigi = [i for i in enumerate_interfaces() if i.vid == FLYDIGI_VID]
     if not flydigi:
         print("No Flydigi HID interfaces present.")
+        hint = not_found_message()
+        if not hint.startswith("No Flydigi"):
+            print(hint)
         return 1
     print(f"{'device':<14} {'vid:pid':<12} {'usage':<8} role")
     for i in flydigi:

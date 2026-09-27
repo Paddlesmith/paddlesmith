@@ -81,8 +81,11 @@ app.
 
 ## Troubleshooting
 
-- **"No Flydigi controller found"**: check the switch on the back, reconnect,
-  and press the Flydigi logo button to wake the controller.
+- **"No Flydigi controller found"**, or a message that a **Switch Pro
+  Controller** or **Xbox controller** is connected: the switch on the back of
+  the controller is in the wrong position. Slide it all the way **left** (the
+  USB-stick picture), connect the cable or dongle, and press the Flydigi logo
+  button. Paddlesmith connects on its own within a couple of seconds.
 - **"macOS refused access"**: go to **System Settings → Privacy & Security →
   Input Monitoring**, turn on Paddlesmith, then reopen it.
 - **Something went wrong after a change**: restore your backup with
